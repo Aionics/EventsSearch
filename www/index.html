@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>test</title>
+        <script src="jquery-3.1.1.min.js" charset="utf-8"></script>
+    	<script src="knockout-3.4.1.js" charset="utf-8"></script>
+        <script src="index.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <div class="main">
+            <input type="text" name="" value="" data-bind="textInput: input">
+            <button type="button" name="button" id="button" data-bind="click: search.bind($data, 'afisha', input())">Найти на afisha.ru</button>
+            <!-- ko foreach: {data: items, as: 'item'} -->
+            <p><a data-bind="attr: {href: item.src}, text: item.title"></a></p>
+            <!-- /ko -->
+        </div>
+    </body>
+</html>
