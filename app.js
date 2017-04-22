@@ -33,7 +33,7 @@ app.post('/search', function (req, res, next) {
     })
 })
 
-const PORT = 8088;
+const PORT = 7020;
 app.listen(PORT, function () {
     console.log('listening on ' + PORT);
 });
