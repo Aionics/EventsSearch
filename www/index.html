@@ -3,17 +3,50 @@
     <head>
         <meta charset="utf-8">
         <title>test</title>
+        <link rel="stylesheet" href="materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="index.css">
         <script src="jquery-3.1.1.min.js" charset="utf-8"></script>
+        <script src="materialize.min.js" charset="utf-8"></script>
     	<script src="knockout-3.4.1.js" charset="utf-8"></script>
         <script src="index.js" charset="utf-8"></script>
     </head>
     <body>
         <div class="main">
-            <input type="text" name="" value="" data-bind="textInput: input">
-            <button type="button" name="button" id="button" data-bind="click: search.bind($data, 'afisha', input())">Найти на afisha.ru</button>
-            <!-- ko foreach: {data: items, as: 'item'} -->
-            <p><a data-bind="attr: {href: item.src}, text: item.title"></a></p>
-            <!-- /ko -->
+            <div class="header blue">
+                <div class="row m0">
+                    <div class="input-field col s8">
+                        <input id="password" type="text" data-bind="textInput: input">
+                        <label for="password">Поиск мероприятий</label>
+                    </div>
+                    <div class="col s4 buttonCol">
+                        <a id="button" class="waves-effect waves-light btn blue darken-3" data-bind="
+                            click: search.bind($data, input()),
+                            text: searching() ? 'Ищем...' : 'Найти',
+                            css: {disabled: searching()}
+                        ">
+                            Найти
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="progress" data-bind="visible: searching()">
+                <div class="indeterminate"></div>
+            </div>
+            <div class="container">
+                <h5 class="blue-text text-darken-4" data-bind="text: 'Найдено результатов: ' + items().length, visible: items().length > 0"></h5>
+                <h5 class="blue-text text-darken-4" data-bind="visible: items().length == 0 && ready()">Ничего не найдено :с</h5>
+                <!-- ko foreach: {data: items, as: 'item'} -->
+                <div class="row">
+                    <div class="col s12">
+                        <a class="waves-effect waves-light btn blue darken-3" target="_blank" data-bind="attr: {href: item.src}">
+                            <i class="material-icons right">play_arrow</i>
+                            <span data-bind="text: item.title"></span>
+                        </a>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
         </div>
     </body>
 </html>

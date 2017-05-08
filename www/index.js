@@ -1,27 +1,34 @@
 var m_site = {
     input: ko.observable(),
-    items: ko.observableArray()
+    items: ko.observableArray(),
+    ready: ko.observable(false),
+    searching: ko.observable(false),
 };
 
-m_site.search = function (target, request) {
-    $('#button').prop('disabled', true);
-    $('#button').text('Ищем...');
+m_site.search = function (request) {
+    m_site.ready(false)
+    m_site.searching(true)
+    m_site.items([])
     $.ajax({
         url: '/search',
         type: 'post',
         data: JSON.stringify({
-            target: target,
             request: request
         }),
         dataType: 'JSON',
         contentType: 'application/json',
         success: function (message) {
-            $('#button').prop('disabled', false);
-            $('#button').text('Найти на afisha.ru');
+            m_site.searching(false)
             if (message.err) {
                 return console.log(message.err);
             }
-            m_site.items(message.data)
+            m_site.ready(true)
+            for (serviceName in message.data) {
+                let service = message.data[serviceName]
+                for (linkId in service) {
+                    m_site.items.push(service[linkId])
+                }
+            }
         }
     })
 }

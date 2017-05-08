@@ -1,3 +1,4 @@
+const logger = require('./logger')
 module.exports = {
     afisha: function (search, done) {
         const querystring = require('querystring');
@@ -6,7 +7,7 @@ module.exports = {
         Request.get('https://www.afisha.ru/search/?search_str=' + search, function (error, response, body) {
             require("jsdom").env(body, function (err, window) {
                 if (err) {
-                    console.error(err);
+                    logger.error(err);
                     return;
                 }
                 let $ = require("jquery")(window);
@@ -22,7 +23,58 @@ module.exports = {
                     }
                 }
                 done(answer);
-                
+
+            });
+        });
+    },
+    kudago: function (search, done) {
+        const querystring = require('querystring');
+        const Request = require('request')
+        search = querystring.escape(search)
+        Request.get('https://kudago.com/search/?q=' + search + '&location=ekb', function (error, response, body) {
+            require("jsdom").env(body, function (err, window) {
+                if (err) {
+                    logger.error(err);
+                    return;
+                }
+                let $ = require("jquery")(window);
+                answer = []
+                let links = $('.post-list-item-title-link');
+                for (link of links) {
+                    answer.push({
+                        title: $(link).text(),
+                        src: 'https://kudago.com' + $(link).attr('href')
+                    })
+                }
+                done(answer);
+
+            });
+        });
+    },
+    // https://www.2do2go.ru/search?locale=5&query=%D0%9B%D0%B5%D0%BA%D1%86%D0%B8%D1%8F
+    todotogo: function (search, done) {
+        const querystring = require('querystring');
+        const Request = require('request')
+        search = querystring.escape(search)
+        Request.get('https://www.2do2go.ru/search?locale=5&query=' + search, function (error, response, body) {
+            require("jsdom").env(body, function (err, window) {
+                if (err) {
+                    logger.error(err);
+                    return;
+                }
+                // fs = require('fs');
+                // fs.appendFileSync('html.html', body)
+                let $ = require("jquery")(window);
+                answer = []
+                let links = $('.search-result-item_title');
+                for (link of links) {
+                    answer.push({
+                        title: $(link).text(),
+                        src: 'https://www.2do2go.ru' + $(link).attr('href')
+                    })
+                }
+                done(answer);
+
             });
         });
     }
