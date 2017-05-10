@@ -6,12 +6,12 @@ module.exports = {
         search = querystring.escape(search)
         Request.get('https://www.afisha.ru/search/?search_str=' + search, function (error, response, body) {
             require("jsdom").env(body, function (err, window) {
+                answer = []
                 if (err) {
                     logger.error(err);
-                    return;
+                    return done(answer);;
                 }
                 let $ = require("jquery")(window);
-                answer = []
                 let links = $('h3 a');
                 for (link of links) {
                     let linkId = $(link).attr('id') || ''
@@ -33,12 +33,12 @@ module.exports = {
         search = querystring.escape(search)
         Request.get('https://kudago.com/search/?q=' + search + '&location=ekb', function (error, response, body) {
             require("jsdom").env(body, function (err, window) {
+                answer = []
                 if (err) {
                     logger.error(err);
-                    return;
+                    return done(answer);;
                 }
                 let $ = require("jquery")(window);
-                answer = []
                 let links = $('.post-list-item-title-link');
                 for (link of links) {
                     answer.push({
@@ -58,14 +58,14 @@ module.exports = {
         search = querystring.escape(search)
         Request.get('https://www.2do2go.ru/search?locale=5&query=' + search, function (error, response, body) {
             require("jsdom").env(body, function (err, window) {
+                answer = []
                 if (err) {
                     logger.error(err);
-                    return;
+                    return done(answer);
                 }
                 // fs = require('fs');
                 // fs.appendFileSync('html.html', body)
                 let $ = require("jquery")(window);
-                answer = []
                 let links = $('.search-result-item_title');
                 for (link of links) {
                     answer.push({
