@@ -45,7 +45,12 @@ app.post('/search', function (req, res, next) {
             Search.todotogo(req.body.request, function (answer) {
                 done(null, answer)
             });
-        }
+        },
+        culture: function (done) {
+            Search.culture(req.body.request, function (answer) {
+                done(null, answer)
+            });
+        },
 
     }, function (err, result) {
         if (err) {

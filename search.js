@@ -62,8 +62,6 @@ module.exports = {
                     logger.error(err);
                     return;
                 }
-                // fs = require('fs');
-                // fs.appendFileSync('html.html', body)
                 let $ = require("jquery")(window);
                 answer = []
                 let links = $('.search-result-item_title');
@@ -71,6 +69,32 @@ module.exports = {
                     answer.push({
                         title: $(link).text(),
                         src: 'https://www.2do2go.ru' + $(link).attr('href')
+                    })
+                }
+                done(answer);
+
+            });
+        });
+    },
+    culture: function (search, done) {
+        const querystring = require('querystring');
+        const Request = require('request')
+        search = querystring.escape(search)
+        Request.get('http://www.culture.ru/search?criteria=' + search, function (error, response, body) {
+            require("jsdom").env(body, function (err, window) {
+                if (err) {
+                    logger.error(err);
+                    return;
+                }
+                // fs = require('fs');
+                // fs.appendFileSync('html.html', body)
+                let $ = require("jquery")(window);
+                answer = []
+                let links = $('div.News').find('div.heading3 a');
+                for (link of links) {
+                    answer.push({
+                        title: $(link).text(),
+                        src: 'http://www.culture.ru' + $(link).attr('href')
                     })
                 }
                 done(answer);
